@@ -4,48 +4,47 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, ref, onMounted } from 'vue';
+<script setup>
+import { ref, onMounted, watch } from 'vue';
 import VueMarkdown from 'vue-markdown-render';
 import hljs from 'highlight.js';
 
-export default defineComponent({
-  components: {
-    VueMarkdown,
-  },
-  props: {
-    filePath: String, // Path to the .md file
-  },
-  setup(props) {
-    const markdown = ref('');
-
-    onMounted(async () => {
-      try {
-        const response = await fetch(props.filePath);
-        markdown.value = await response.text();
-      } catch (error) {
-        console.error('Error loading Markdown file:', error);
-      }
-    });
-
-    const options = {
-      highlight: function (str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          try {
-            return hljs.highlight(str, { language: lang }).value;
-          } catch (__) {}
-        }
-
-        return '';
-      },
-    };
-
-    return {
-      markdown,
-      options,
-    };
-  },
+const props = defineProps({
+  filePath: String, // Path to the .md file
 });
+
+const markdown = ref('');
+
+const loadMarkdown = () => {
+  fetch(props.filePath)
+    .then(response => response.text())
+    .then(text => {
+      markdown.value = text;
+    })
+    .catch(error => {
+      console.error('Error loading Markdown file:', error);
+    });
+}
+
+onMounted(async () => {
+  loadMarkdown();
+});
+
+watch(() => props.filePath, () => {
+  loadMarkdown();
+});
+
+const options = {
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) { }
+    }
+
+    return '';
+  },
+};
 </script>
 
 <style>

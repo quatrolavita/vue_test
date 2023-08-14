@@ -3,14 +3,20 @@
     <div v-for="item in sidebarItems" :key="item" class="sidebarItem">
       <h3>{{ item.folderName }}</h3>
       <div class="folderItems">
-        <a v-for="hrefItem in item.mdNameList">{{ hrefItem }}</a>
+        <router-link v-for="hrefItem in item.mdNameList" :to="generatePath(item.filePath, hrefItem)">{{ hrefItem }}</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { defineProps } from 'vue';
 import { sidebarItems } from '../../documentation/output.js';
+
+const generatePath = (filePath, mdName) => {
+  return `${filePath ? filePath : '/'}${mdName}`;
+};
+
 </script>
 
 <style scoped>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import VueMarkdown from './components/TestMDGenerator.vue';
 import SideBar from './components/SideBar/SideBar.vue';
 import Header from './components/Header.vue';
 </script>
@@ -10,7 +9,7 @@ import Header from './components/Header.vue';
   </div>
   <div class="flex">
     <SideBar />
-    <VueMarkdown filePath="src/documentation/general/constants.md" />
+    <router-view />
   </div>
 </template>
 
