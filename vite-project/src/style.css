@@ -1,0 +1,46 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+    --identifierColour: #E06B75;
+      --tagColour: #8E94A1;
+      --equals: #ABB2BF;
+      --valColour: #92BA76;
+      --codeBg: #282C34;
+      --lineColours: #363C49;
+      --commentColour: #6A7181;
+      --linkColour: #56B6C2;
+      --hoverColour: #518BFF;
+}
+
+
+p > code {
+  background-color: #1f1f1f;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px 0;
+  overflow-x: auto;
+}
+
+
+/* Code block container */
+ pre {
+  background-color: #1f1f1f;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  overflow-x: auto;
+}
+
