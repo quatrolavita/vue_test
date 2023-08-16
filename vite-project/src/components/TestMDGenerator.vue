@@ -1,19 +1,71 @@
 <template>
-  <div class="markdown-loader">
-    <VueMarkdown :source="markdown" :options="options" />
-  </div>
+  <div class="markdown-loader" @click="testClick" v-html="renderMarkdown()" /> 
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import VueMarkdown from 'vue-markdown-render';
+import markdownIt from 'markdown-it';
 import hljs from 'highlight.js';
+import anchor from 'markdown-it-anchor';
+
+const markdown = ref('');
 
 const props = defineProps({
   filePath: String, // Path to the .md file
 });
 
-const markdown = ref('');
+const md = markdownIt({
+    highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return '<pre class="hljs"><button class="copyButton">Copy</button><code>' +
+          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+          '</code></pre>';
+      } catch (__) { }
+    }
+
+    return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+  },
+  linkify: true,
+  html: true,
+})
+md.use(anchor, {
+});
+
+const testClick = (e) => {
+  if (e.target.className === 'copyButton') {
+     const codeElement = e.target.nextElementSibling;
+    if (codeElement) {
+      copyCode(codeElement);
+    }
+  }
+}
+
+const copyCode = (element) => {
+  const range = document.createRange();
+  range.selectNode(element);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+
+  try {
+    document.execCommand('copy');
+    alert('Code copied to clipboard!');
+  } catch (err) {
+    console.error('Unable to copy code:', err);
+  } finally {
+    window.getSelection().removeAllRanges();
+  }
+}
+
+
+const renderMarkdown = () => {
+  const html = md.render(markdown.value);
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  return doc.body.innerHTML;
+}
 
 const loadMarkdown = () => {
   fetch(props.filePath)
@@ -34,17 +86,7 @@ watch(() => props.filePath, () => {
   loadMarkdown();
 });
 
-const options = {
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(str, { language: lang }).value;
-      } catch (__) { }
-    }
 
-    return '';
-  },
-};
 </script>
 
 <style>
@@ -63,6 +105,7 @@ const options = {
 .hljs {
   color: #c9d1d9;
   background: #0d1117;
+  position: relative;
 }
 
 .hljs-doctag,
@@ -173,5 +216,16 @@ const options = {
 .hljs-punctuation,
 .hljs-tag {
   /* purposely ignored */
+}
+
+img {
+  display: block;
+}
+
+.copyButton {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background-color: #333333;
 }
 </style>

@@ -11,7 +11,7 @@
 
 <script setup>
 import { defineProps } from 'vue';
-import { sidebarItems } from '../../documentation/output.js';
+import { sidebarItems } from '../../../output.js';
 
 const generatePath = (filePath, mdName) => {
   return `${filePath ? filePath : '/'}${mdName}`;

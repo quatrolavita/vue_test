@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import TestMDGeneratorVue from '../components/TestMDGenerator.vue';
-import { sidebarItems } from '../documentation/output.js';
+import { sidebarItems } from '../../output.js';
 
 const generatedRoutes = sidebarItems.map(
   ({
@@ -12,7 +12,7 @@ const generatedRoutes = sidebarItems.map(
       return {
         path: `${filePath ? filePath: '/' }${mdName}`,
         component: TestMDGeneratorVue,
-        props: { filePath: `../src/documentation/${folderName}/${mdName}.md` }, // Pass props to the component
+        props: { filePath: `../documentation/${folderName}/${mdName}.md` }, // Pass props to the component
       };
     });
   }
