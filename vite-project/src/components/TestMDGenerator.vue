@@ -2,7 +2,7 @@
   <div class="markdown-loader" @click="testClick" v-html="renderMarkdown()" /> 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import markdownIt from 'markdown-it';
 import hljs from 'highlight.js';
